@@ -24,10 +24,10 @@
 }
 
 /*PHONE */
-@media (max-width: 425px){
+@media (max-width: 412px){
     .card-class{
         display: grid;
         grid-template-columns: 200px 200px;
-        column-gap: 50px;
+        column-gap: 100px;
     }
 }
