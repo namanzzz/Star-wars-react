@@ -142,7 +142,7 @@ const CardPage = ({ peopleData }) => {
                 
                 :
                 /*loading screen logic or if user clicks on card not in the data*/
-                <p className='load-text'>Loading Character Data....<br/><br/></p>
+                <p className='load-text'>Loading Character Data.....<br/><br/></p>
             }
             
         </div>
