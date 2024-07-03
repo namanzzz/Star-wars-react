@@ -1,6 +1,5 @@
 import './App.css';
 import Header from "./components/Header";
-import './components/Header.css';
 import HomePage from './components/HomePage';
 import './components/HomePage.css';
 import CardPage from './components/CardPage';

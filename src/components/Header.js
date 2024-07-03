@@ -1,6 +1,5 @@
 'use client'
 import { FaUserCircle } from "react-icons/fa";
-import './Header.css'
 
 import {
   Box,

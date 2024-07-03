@@ -1,12 +1,14 @@
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Heading, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
+import './CardPage.css';
 
 const CardPage = ({ peopleData }) => {
     //the states with the vehicles and starships data for the card
     const [vehicles,setVehicles]=useState([]);
     const [starships,setStarships]=useState([]);
-
+    const [films, setFilms] = useState([]);
     //finding the card that user wants to look at
     const cardId = useLocation().pathname.slice(1);
     const specificCard = peopleData.find((person)=>person.name===decodeURI(cardId));
@@ -45,67 +47,99 @@ const CardPage = ({ peopleData }) => {
         }        
     },[specificCard])
 
+    // function to load movies for individual character
+    const getMovies = useCallback(async () => {
+     let promises = [];
+     let films = [];
+     if(specificCard){
+        for(let film of specificCard.films){
+            promises.push(
+                await axios.get(film).then((response)=>{
+                    films.push(response.data);
+                })
+            )
+        }
+        Promise.all(promises).then(()=>setFilms(films));
+     }
+    }, [specificCard])
+
+
+
     //loads vehicle and starship data as the user clicks on a card
     useEffect(()=>{
         getVehicles();
         getStarships();
-    },[peopleData,getVehicles,getStarships])
+        getMovies();
+    },[peopleData,getVehicles,getStarships, getMovies])
 
     return (
         <div>
             {specificCard ? 
                 <>
-                    <p className='homepage-text' style={{marginBottom:'32px'}}><Link to="/" style={{ textDecoration:'none' }}>All Cards</Link> {'>'} <span className='header-text-span'>{specificCard.name} Details</span></p>
+                
+                <p className='homepage-text' style={{marginBottom:'32px'}}><Link to="/" style={{ textDecoration:'none' }}>All Characters</Link> {'>'} <span className='header-text-span'>{specificCard.name} Details</span></p>
+                    <SimpleGrid columns={2} spacing={10}>
+                    
+                                <Box className='card-box card-class'>
+                                    <Card maxWidth='md'>
+                                        <CardHeader>
+                                        <Heading size='xl'>{specificCard.name}
+                                        </Heading>
+                                        </CardHeader>
 
-                    <div className='card-box-individual'>
-                        <div className='card-header'>
-                            <img className='card-header-icon' src={require('../resources/Interview Assets/Card.svg').default} alt='icon' height={16} width={16}/>
-                            <p className='card-name-text'>{specificCard.name}</p>
-                        </div>
-                        <div className='card-info'>
-                                <div className='card-info-header-individual'>
-                                    <p className='card-info-header-text'><img src={require('../resources/Interview Assets/Gender-Male.svg').default} alt='icon' height={16} width={16}/>{specificCard.birth_year}</p>
-                                    <p className='card-info-header-text'>{specificCard.species}</p>
-                                </div>
+                                        {/* <Image objectFit='contain' src='https://images4.alphacoders.com/814/81446.jpg'/> */}
 
-                                <div className='card-info-main'>
-                                    <div className='info-box-individual'>
-                                        <p className='info-header-text'><img src={require('../resources/Interview Assets/Homeworld.svg').default} alt='icon' height={16} width={16}/>HOMEWORLD</p>
-                                        <p className='info-value-text'>{specificCard.homeworld}</p>
-                                    </div>
-                                    {/*DISPLAY VEHICLES*/}
-                                    {specificCard.vehicles.length>0 ?
-                                        vehicles.map((vehicle)=>(
-                                            <div className='info-box-individual' key={vehicle}>
-                                                <p className='info-header-text'><img src={require('../resources/Interview Assets/Vehicle.svg').default} alt='icon' height={16} width={16}/>VEHICLE</p>
-                                                <p className='info-value-text'>{vehicle}</p>
-                                            </div>
-                                        ))
-                                        :
-                                        <div className='info-box-individual'>
-                                                <p className='info-header-text'><img src={require('../resources/Interview Assets/Vehicle.svg').default} alt='icon' height={16} width={16}/>VEHICLE</p>
-                                                <p className='info-value-text'>None</p>
-                                        </div>
-                                    }
-                                    {/*DISPLAY STARSHIPS*/}
-                                    {
-                                        specificCard.starships.length>0 ?
-                                            starships.map((starship)=>(
-                                                <div className='info-box-individual' key={starship}>
-                                                    <p className='info-header-text'><img src={require('../resources/Interview Assets/Starship.svg').default} alt='icon' height={16} width={16}/>STARSHIP</p>
-                                                    <p className='info-value-text'>{starship}</p>
-                                                </div>
-                                            ))
-                                            :
-                                            <div className='info-box-individual'>
-                                                <p className='info-header-text'><img src={require('../resources/Interview Assets/Vehicle.svg').default} alt='icon' height={16} width={16}/>STARSHIP </p>
-                                                <p className='info-value-text'>None</p>
-                                            </div>
-                                    }
-                                </div>
-                            </div>
-                    </div>
+                                        <CardBody>
+                                            <Text> <span style={{fontWeight:'bold'}}>Specie:</span>  {specificCard.species}</Text>
+                                            <Text><span style={{fontWeight:'bold'}}>Height: </span>  {specificCard.height}</Text>
+                                            <Text><span style={{fontWeight:'bold'}}>Mass: </span> {specificCard.mass}</Text>
+                                            <Text><span style={{fontWeight:'bold'}}>Skin color: </span>  {specificCard.skin_color}</Text>
+                                            <Text><span style={{fontWeight:'bold'}}>Birth Year: </span>  {specificCard.birth_year} </Text>
+                                 
+                                        <Text style={{fontWeight:'bold'}} size='md'>Vehicles: </Text> 
+                                         {
+                                            specificCard.vehicles.length > 0 ? vehicles.map((vehicle)=>(
+                                                <Text key={vehicle}> &nbsp; {vehicle}</Text>
+                                            )) : <Text>No vehicles</Text>
+                                           }
+                                        <Text style={{fontWeight:'bold'}} size='md'>Starships: </Text>
+                                        {
+                                            specificCard.starships.length > 0 ? starships.map((starship)=>(
+                                                <Text key={starship}>&nbsp; {starship}</Text>
+                                            )) : <Text>No starships</Text> 
+                                        }
+                                        </CardBody>
+                                        <CardFooter>
+                                        </CardFooter>
+                                    </Card>
+                                </Box>
+
+                                <Box className='card-box card-class'>
+                                    <Card maxWidth='md'>
+                                        <CardHeader>
+                                        <Heading size='lg'>Movie Appearances
+                                        </Heading>
+                                        </CardHeader>
+
+                                        <CardBody>
+                                       
+                                        <Text style={{ fontStyle:'italic'}} size='md'> Starwars character {specificCard.name} has appeared in total {films.length} films</Text><br/> 
+                                         {
+                                            specificCard.films.length > 0 ? films.map((film)=>(
+                                                <Text key={film}> &nbsp; <b>{film.title}:</b>  {film.release_date}</Text>
+                                                
+                                            )) : <Text>No Movies</Text>
+                                           }
+                                        
+                                        </CardBody>
+                                        <CardFooter>
+                                        </CardFooter>
+                                    </Card>
+                                </Box>
+                            </SimpleGrid>
+                        
                 </>
+                
                 :
                 /*loading screen logic or if user clicks on card not in the data*/
                 <p className='load-text'>Loading data...<br/><br/></p>
