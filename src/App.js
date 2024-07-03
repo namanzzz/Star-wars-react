@@ -1,5 +1,6 @@
 import './App.css';
 import Header from "./components/Header";
+
 import HomePage from './components/HomePage';
 import './components/HomePage.css';
 import CardPage from './components/CardPage';
@@ -16,7 +17,6 @@ function App() {
 
   // for pagination
   const [currentPage, setCurrentPage] = useState(1);
-
 
   //api data for all the cards
   const [peopleData,setPeopleData] = useState([]);
@@ -54,7 +54,7 @@ function App() {
       })
   }
 
-  //loads the card data when app is launched and updates the homeworld and species names then set the data to peopleData state
+  
   // dependency array, page reload when page changes
   useEffect(()=>{
     loadAllPeople();
@@ -62,9 +62,7 @@ function App() {
   
   
   return (
-
     <ChakraProvider>
-
     <BrowserRouter>
       <div className='page-body'>
         <Header />

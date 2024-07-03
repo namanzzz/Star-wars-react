@@ -123,7 +123,7 @@ const CardPage = ({ peopleData }) => {
 
                                         <CardBody>
                                        
-                                        <Text style={{ fontStyle:'italic'}} size='md'> Starwars character {specificCard.name} has appeared in total {films.length} films</Text><br/> 
+                                        <Text style={{ fontStyle:'italic'}} size='md'> Starwars character <span style={{fontWeight:'bold'}}>{specificCard.name}</span> has appeared in total {films.length} films</Text><br/> 
                                          {
                                             specificCard.films.length > 0 ? films.map((film)=>(
                                                 <Text key={film}> &nbsp; <b>{film.title}:</b>  {film.release_date}</Text>
