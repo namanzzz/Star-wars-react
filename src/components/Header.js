@@ -62,7 +62,7 @@ export default function Nav() {
                   <br />
                   <MenuDivider />
                   <MenuItem><a href="https://www.linkedin.com/in/namanm21/" target="__blank">LinkedIn</a></MenuItem>
-                  <MenuItem><a href="https://www.github.com/namanzzz" target="__blank">Github</a></MenuItem>
+                  <MenuItem><a href="https://github.com/namanzzz/Star-wars-react" target="__blank">Github</a></MenuItem>
                   <MenuItem> <a href="https://swapi.dev/api/people/" target="__blank"> View API</a></MenuItem>
                 </MenuList>
               </Menu>
